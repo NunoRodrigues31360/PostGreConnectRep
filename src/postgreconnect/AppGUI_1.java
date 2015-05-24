@@ -325,14 +325,14 @@ public class AppGUI_1 extends javax.swing.JFrame {
         System.exit(0);
     }
 
-    public static void main(String args[]) {
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AppGUI_1().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new AppGUI_1().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel PkLabel;
