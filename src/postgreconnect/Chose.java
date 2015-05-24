@@ -75,6 +75,9 @@ public class Chose extends javax.swing.JFrame {
             db1 = true;
         } else {
             con1.close();
+            con1.setVisible(false);
+            bd1.setBackground(Color.red);
+            db1=false;
         }
     }//GEN-LAST:event_bd1ActionPerformed
 
@@ -87,6 +90,9 @@ public class Chose extends javax.swing.JFrame {
             db2 = true;
         } else {
             con2.close();
+            con2.setVisible(false);
+            bd2.setBackground(Color.red);
+            db2=false;
         }
     }//GEN-LAST:event_bd2ActionPerformed
 

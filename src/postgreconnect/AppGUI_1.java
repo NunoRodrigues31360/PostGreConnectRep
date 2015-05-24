@@ -322,7 +322,6 @@ public class AppGUI_1 extends javax.swing.JFrame {
     
      public void close(){
         connection.closeDB();
-        System.exit(0);
     }
 
 //    public static void main(String args[]) {

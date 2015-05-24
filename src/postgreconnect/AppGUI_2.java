@@ -322,7 +322,7 @@ public class AppGUI_2 extends javax.swing.JFrame {
     
     public void close(){
         connection.closeDB();
-        System.exit(0);
+        
     }
 
 //    public static void main(String args[]) {
@@ -333,7 +333,7 @@ public class AppGUI_2 extends javax.swing.JFrame {
 //            }
 //        });
 //    }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel PkLabel;
     private javax.swing.ButtonGroup buttonGroup1;
