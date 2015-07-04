@@ -40,7 +40,7 @@ public class AppGUI_1 extends javax.swing.JFrame {
         ArrayList<String> keys = connection.getPKeys();
         System.out.println(keys.toString());
         try {
-            fileResult = new ConstructXML("E:/SyncData/file_1.xml");
+            fileResult = new ConstructXML("E:/SyncData/file_1.xml");     
         } catch (TransformerException | SAXException | IOException ex) {
             Logger.getLogger(AppGUI_1.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -308,7 +308,7 @@ public class AppGUI_1 extends javax.swing.JFrame {
         try {
             JOptionPane.showMessageDialog(null, "Finalizado");
             Files.delete(Paths.get(URI.create("file:/E:/SyncData/file_1.xml/")));
-            fileResult = new ConstructXML("E:/SyncData/file_1.xml");
+            fileResult = new ConstructXML("E:/SyncData/file_1.xml");           
         } catch (TransformerException | SAXException | IOException ex) {
             Logger.getLogger(AppGUI_1.class.getName()).log(Level.SEVERE, null, ex);
         }

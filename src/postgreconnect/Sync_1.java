@@ -102,6 +102,7 @@ public class Sync_1 {
             if (nRows == 0) {                         // regito não existe
                 JOptionPane.showMessageDialog(decision, "O registo " + table + " -- " + " " + connection.getTablePKeys(table) + " " + key
                         + " não existe no destino");
+
             } else {
                 connection.executeSQLCommand(query); // lida do xml 
             }
@@ -118,14 +119,34 @@ public class Sync_1 {
         try {
             nRows = connection.printResultSet(rs);
             if (nRows == 0) {                         // regito não existe
-                JOptionPane.showMessageDialog(decision, "O registo " + table + " -- " + " " + connection.getTablePKeys(table) + " " + key
-                        + " não existe no destino");
+//                JOptionPane.showMessageDialog(decision, "O registo " + table + " -- " + " " + connection.getTablePKeys(table) + " " + key
+//                        + " não existe no destino");
+                if (JOptionPane.showConfirmDialog(decision, "O registo " + table + " -- " +   connection.getTablePKeys(table) + " " + key
+                        + " não existe no destino. Pretende cria-lo?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    String modifiedQuery = "INSERT INTO " + table + " VALUES (";
+                    String[] test = query.split("'");
+
+                    modifiedQuery += "'" + key + "','" + test[1] + "','" + Integer.parseInt(vts) + "')";
+//                    for (int i =1; i<test.length; i+=2){
+//                        modifiedQuery+="'"+test[i]+"'";                     
+//                    }
+                    System.out.println("MODIFY  " + modifiedQuery);
+                    connection.executeSQLCommand(modifiedQuery); // nova instrução               
+                }
             } else {
                 int vtsVal = connection.getVts(rs);
                 if (Integer.parseInt(vts) > vtsVal) {
                     System.out.println("VTS " + vtsVal);
                     connection.executeSQLCommand(query); // lida do xml
-                }               
+                } else if (Integer.parseInt(vts) == vtsVal) {
+                    String [] value1 = query.split("SET");
+                    String [] value2 = value1[1].split("WHERE");
+                    if (JOptionPane.showConfirmDialog(decision, "O registo " + table + " -- " + " " + 
+                            " " + connection.getResultset() +" existe com a mesma versão.\n " + 
+                            "Pretende substituir por? " + value2[0], null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        connection.executeSQLCommand(query);
+                    }
+                }
             }
         } catch (SQLException ex) {
             connection.printSQLException(ex);

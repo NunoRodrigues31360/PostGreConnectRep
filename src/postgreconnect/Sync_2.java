@@ -125,7 +125,12 @@ public class Sync_2 {
                 if (Integer.parseInt(vts) > vtsVal) {
                     System.out.println("VTS " + vtsVal);
                     connection.executeSQLCommand(query); // lida do xml 
-                }                
+                } else if (Integer.parseInt(vts) == vtsVal) {
+                    if (JOptionPane.showConfirmDialog(decision, "O registo " + table + " -- " + " " + connection.getTablePKeys(table) + " " + key
+                            + " existe com a mesma versão. Pretende sobrepor?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        connection.executeSQLCommand(query);
+                    }
+                }             
             }
         } catch (SQLException ex) {
             connection.printSQLException(ex);
