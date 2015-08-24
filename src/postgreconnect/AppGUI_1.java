@@ -23,10 +23,11 @@ public class AppGUI_1 extends javax.swing.JFrame {
     Statement stmt;
     ResultSet rs;
     int a;
-    String key, p1, p2, p3;
+    String key, p1, p2, p3, sql;
     ConstructXML fileResult;
     ConnectDB connection;
     DatabaseMetaData dbmd;
+    boolean isPeople;
 
     public AppGUI_1() {
         initComponents();
@@ -63,6 +64,8 @@ public class AppGUI_1 extends javax.swing.JFrame {
         nomeLabel = new javax.swing.JLabel();
         ordemLabel = new javax.swing.JLabel();
         syncBt = new javax.swing.JButton();
+        campo4 = new javax.swing.JTextField();
+        moradaLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tabela - Loc 1");
@@ -132,6 +135,10 @@ public class AppGUI_1 extends javax.swing.JFrame {
             }
         });
 
+        campo4.setToolTipText("");
+
+        moradaLabel.setText("Morada");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -140,61 +147,69 @@ public class AppGUI_1 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(insertBt)
-                                    .addGap(59, 59, 59)
-                                    .addComponent(updateBt)
-                                    .addGap(73, 73, 73))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(tablesJCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(PkLabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(ordemLabel)
-                                    .addComponent(nomeLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 19, Short.MAX_VALUE)
-                                .addComponent(deletetBt)
-                                .addGap(63, 63, 63)
-                                .addComponent(cancelBt))
-                            .addComponent(campo2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(campo1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(campo3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(insertBt)
+                        .addGap(59, 59, 59)
+                        .addComponent(updateBt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deletetBt)
+                        .addGap(63, 63, 63)
+                        .addComponent(cancelBt))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(syncBt)))
+                        .addComponent(syncBt))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tablesJCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(56, 56, 56)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(19, 19, 19)
+                                        .addComponent(PkLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(moradaLabel)
+                                            .addComponent(nomeLabel))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(campo2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(campo1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(campo4)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(9, 9, 9)
+                                .addComponent(ordemLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(campo3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(128, 128, 128)))
+                        .addGap(25, 25, 25)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tablesJCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(campo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PkLabel)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(tablesJCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nomeLabel))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ordemLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                            .addComponent(PkLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(campo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nomeLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(campo4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(moradaLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(campo3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ordemLabel))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(syncBt)
                 .addGap(64, 64, 64)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -205,21 +220,32 @@ public class AppGUI_1 extends javax.swing.JFrame {
                 .addGap(32, 32, 32))
         );
 
-        setBounds(450, 100, 506, 340);
+        setBounds(450, 100, 506, 351);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablesJComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tablesJComboActionPerformed
         selectedTable = (String) tablesJCombo.getSelectedItem();
-        System.out.println(selectedTable);
-        try {
+        System.out.println(selectedTable);    
+        try {           
             rs = stmt.executeQuery("SELECT * FROM " + selectedTable);
         } catch (SQLException ex) {
             ConnectDB.printSQLException(ex);
         }
+        if ("people".equalsIgnoreCase(selectedTable)){
+            isPeople = true;
+            moradaLabel.setVisible(isPeople);
+            campo4.setVisible(isPeople);
+        }
+        else{
+            isPeople = false;
+            moradaLabel.setVisible(isPeople);
+            campo4.setVisible(isPeople);
+        }
+        System.out.println(isPeople);
     }//GEN-LAST:event_tablesJComboActionPerformed
 
     private void tablesJComboMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablesJComboMouseClicked
-
+        clearTxtField();
         ResultSet tables;
         tablesJCombo.removeAllItems();
         try {
@@ -243,6 +269,7 @@ public class AppGUI_1 extends javax.swing.JFrame {
                 if (aux.equalsIgnoreCase(key)) {
                     campo2.setText(rs.getString(2));
                     campo3.setText(rs.getString(3));
+                    campo4.setText(rs.getString(4));
                 }
                 rs.next();
             }
@@ -254,8 +281,12 @@ public class AppGUI_1 extends javax.swing.JFrame {
     private void insertBtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertBtActionPerformed
         try {
             campo3.setText("1");
-            String sql = "INSERT INTO " + selectedTable + " VALUES ('" + campo1.getText() + "','"
-                    + campo2.getText() + "','" + campo3.getText() + "')";
+            if (isPeople)
+                sql = "INSERT INTO " + selectedTable + " VALUES ('" + campo1.getText() + "','"
+                    + campo2.getText() + "','" + campo3.getText() + "','" + campo4.getText() + "')";
+            else
+                sql = "INSERT INTO " + selectedTable + " VALUES ('" + campo1.getText() + "','"
+                    + campo2.getText() + "','" + campo3.getText() + "')";           
             System.out.print(sql);
             connection.executeSQLCommand(sql);
             fileResult.queryProcess(sql, selectedTable, campo1.getText(), campo3.getText());
@@ -276,7 +307,13 @@ public class AppGUI_1 extends javax.swing.JFrame {
         order++;
         campo3.setText(Integer.toString(order));
         try {
-            String sql = "UPDATE " + selectedTable + " SET " + rs.getMetaData().getColumnLabel(2) + "='"
+            if (isPeople)
+                sql = "UPDATE " + selectedTable + " SET " + rs.getMetaData().getColumnLabel(2) + "='"
+                    + campo2.getText() + "'," + rs.getMetaData().getColumnLabel(3) + "='" + campo3.getText() +
+                        "'," + rs.getMetaData().getColumnLabel(4) + "='" + campo4.getText() +"' WHERE("
+                        + rs.getMetaData().getColumnName(1) + "='" + campo1.getText() + "')";
+            else
+                sql = "UPDATE " + selectedTable + " SET " + rs.getMetaData().getColumnLabel(2) + "='"
                     + campo2.getText() + "'," + rs.getMetaData().getColumnLabel(3) + "='" + campo3.getText() + "' WHERE("
                     + rs.getMetaData().getColumnName(1) + "='" + campo1.getText() + "')";
             connection.executeSQLCommand(sql);
@@ -318,20 +355,13 @@ public class AppGUI_1 extends javax.swing.JFrame {
         campo1.setText("");
         campo2.setText("");
         campo3.setText("");
+        campo4.setText("");
     }
     
      public void close(){
         connection.closeDB();
     }
 
-//    public static void main(String args[]) {
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new AppGUI_1().setVisible(true);
-//            }
-//        });
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel PkLabel;
@@ -339,9 +369,11 @@ public class AppGUI_1 extends javax.swing.JFrame {
     private javax.swing.JTextField campo1;
     private javax.swing.JTextField campo2;
     private javax.swing.JTextField campo3;
+    private javax.swing.JTextField campo4;
     private javax.swing.JButton cancelBt;
     private javax.swing.JButton deletetBt;
     private javax.swing.JButton insertBt;
+    private javax.swing.JLabel moradaLabel;
     private javax.swing.JLabel nomeLabel;
     private javax.swing.JLabel ordemLabel;
     private javax.swing.JButton syncBt;
