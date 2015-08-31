@@ -60,7 +60,7 @@ public class Sync_1 {
                         insertOperation(tableName, key, query);
                         break;
                     case "-":
-                        deleteOperation(tableName, key, query);
+                        deleteOperation(tableName, key, query, vts); ///////
                         break;
                     case "*":
                         updateOperation(tableName, key, query, vts);
@@ -75,16 +75,24 @@ public class Sync_1 {
     private void insertOperation(String table, String key, String query) {
         String sqlQuery = "SELECT * FROM " + table + " WHERE (" + connection.getTablePKeys(table) + " = '" + key + "')";
         ResultSet rs = connection.executeSQLCommand(sqlQuery);
-        int nRows;
         try {
-            nRows = connection.printResultSet(rs);
-            if (nRows > 0) {                         // regito já existe
-                if (JOptionPane.showConfirmDialog(decision, "Encontrado: " + table + " -- " + connection.getResultset() + "\n"
-                        + "Substituir por: " + query, null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    // apaga registo no destino e volta a criar
-                    connection.executeSQLCommand("DELETE FROM " + table + " WHERE " + connection.getTablePKeys(table) + "= '" + key + "'");
-                    connection.executeSQLCommand(query);
+            if (connection.printResultSet(rs) > 0) {                         // regito já existe
+                int ver = connection.getVts(rs);
+                if (ver == 1) {                           // não existem updates
+                    if (JOptionPane.showConfirmDialog(decision, "Encontrado: " + table + " -- " + connection.getResultset() + "\n"
+                            + "Substituir por: " + query, null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        // apaga registo no destino e volta a criar
+                        connection.executeSQLCommand("DELETE FROM " + table + " WHERE " + connection.getTablePKeys(table) + "= '" + key + "'");
+                        connection.executeSQLCommand(query);
+                        alterVts(table, key, 1);
+                    } else {
+                        alterVts(table, key, -1);
+                    }
                 }
+                else if (ver < 1){
+                     connection.executeSQLCommand("DELETE FROM " + table + " WHERE " + connection.getTablePKeys(table) + "= '" + key + "'");
+                     connection.executeSQLCommand(query);               
+                 }
             } else {
                 connection.executeSQLCommand(query); // lida do xml 
             }
@@ -93,18 +101,42 @@ public class Sync_1 {
         }
     }
 
-    private void deleteOperation(String table, String key, String query) {
+    private void deleteOperation(String table, String key, String query, String vts) {
         String sqlQuery = "SELECT * FROM " + table + " WHERE (" + connection.getTablePKeys(table) + " = '" + key + "')";
-        ResultSet rs = connection.executeSQLCommand(sqlQuery);
+        ResultSet rs = connection.executeSQLCommand(sqlQuery);        
         int nRows;
         try {
-            nRows = connection.printResultSet(rs);
+            nRows = connection.printResultSet(rs);            
             if (nRows == 0) {                         // regito não existe
                 JOptionPane.showMessageDialog(decision, "O registo " + table + " -- " + " " + connection.getTablePKeys(table) + " " + key
                         + " não existe no destino");
-
             } else {
-                connection.executeSQLCommand(query); // lida do xml 
+                int vt = connection.getVts(rs);
+                if (vt < Integer.parseInt(vts))
+                    connection.executeSQLCommand(query); // lida do xml 
+                else{
+                    rs.first();
+                    if (JOptionPane.showConfirmDialog(decision, "O registo " + table + " -- " + connection.getResultset() + "\n"
+                            + "foi alterado desde a ultima sincronização. Pretende mantê-lo? \n"
+                            , null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        String modifiedQuery = "INSERT INTO " + table + " VALUES ('";
+                        int idx=1;
+                        while(idx <= rs.getMetaData().getColumnCount()){
+                            System.out.println(rs.getString(idx));
+                            modifiedQuery += rs.getString(idx);
+                            System.out.println(modifiedQuery);
+                            if (idx < rs.getMetaData().getColumnCount())
+                                modifiedQuery += "','";
+                            idx++;
+                        }
+                        modifiedQuery += "')";
+                        System.out.println(modifiedQuery);
+                        writeLocalBD(modifiedQuery);
+                    }
+                    else{
+                        connection.executeSQLCommand(query); // lida do xml
+                    }
+                }
             }
         } catch (SQLException ex) {
             connection.printSQLException(ex);
@@ -119,7 +151,7 @@ public class Sync_1 {
         try {
             nRows = connection.printResultSet(rs);
             if (nRows == 0) {                         // regito não existe
-                if (JOptionPane.showConfirmDialog(decision, "O registo " + table + " -- " +   connection.getTablePKeys(table) + " " + key
+                if (JOptionPane.showConfirmDialog(decision, "O registo " + table + " -- " + connection.getTablePKeys(table) + " " + key
                         + " não existe no destino. Pretende cria-lo?", null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     String modifiedQuery = "INSERT INTO " + table + " VALUES (";
                     String[] test = query.split("'");
@@ -134,11 +166,11 @@ public class Sync_1 {
                     System.out.println("VTS " + vtsVal);
                     connection.executeSQLCommand(query); // lida do xml
                 } else if (Integer.parseInt(vts) == vtsVal) {
-                    String [] value1 = query.split("SET");
-                    String [] value2 = value1[1].split("WHERE");
-                    if (JOptionPane.showConfirmDialog(decision, "O registo " + table + " -- " + " " + 
-                            " " + connection.getResultset() +" existe com a mesma versão.\n " + 
-                            "Pretende substituir por? " + value2[0], null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    String[] value1 = query.split("SET");
+                    String[] value2 = value1[1].split("WHERE");
+                    if (JOptionPane.showConfirmDialog(decision, "O registo " + table + " -- " + " "
+                            + " " + connection.getResultset() + " existe com a mesma versão.\n "
+                            + "Pretende substituir por " + value2[0], null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         connection.executeSQLCommand(query);
                     }
                 }
@@ -146,5 +178,30 @@ public class Sync_1 {
         } catch (SQLException ex) {
             connection.printSQLException(ex);
         }
+    }
+
+    void alterVts(String table, String key, int vts) {
+        int vt = 1;
+        vt += vts;
+        ConnectDB localConnection = new ConnectDB("jdbc:postgresql://localhost:5432/MyDB1", p2, p3);
+        String localSqlQuery = "SELECT * FROM " + table + " WHERE (" + localConnection.getTablePKeys(table) + " = '" + key + "')";
+        ResultSet localRs = localConnection.executeSQLCommand(localSqlQuery);
+        int rs = localConnection.getVts(localRs);
+        if (rs == 1 && vts == 1) {
+            localConnection.executeSQLCommand("UPDATE " + table + " SET ver = '" + vt + "' WHERE ("
+                    + localConnection.getTablePKeys(table) + " = '" + key + "')");
+            connection.executeSQLCommand("UPDATE " + table + " SET ver = '" + vt + "' WHERE ("
+                    + connection.getTablePKeys(table) + " = '" + key + "')");
+        }
+        if (rs == 1 && vts == -1){
+            localConnection.executeSQLCommand("UPDATE " + table + " SET ver = '" + vt + "' WHERE ("
+                    + localConnection.getTablePKeys(table) + " = '" + key + "')");
+        }
+    }
+    
+    void writeLocalBD(String query){
+        ConnectDB localConnection = new ConnectDB("jdbc:postgresql://localhost:5432/MyDB1", p2, p3);
+        ResultSet localRs = localConnection.executeSQLCommand(query);  
+        localConnection.closeDB();
     }
 }

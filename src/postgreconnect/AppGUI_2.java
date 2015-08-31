@@ -270,7 +270,7 @@ public class AppGUI_2 extends javax.swing.JFrame {
     }//GEN-LAST:event_campo1ActionPerformed
 
     private void syncBtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_syncBtActionPerformed
-        new Sync_1("E:/SyncData/file_2.xml");
+        new Sync_2("E:/SyncData/file_2.xml");
         try {
             JOptionPane.showMessageDialog(null, "Finalizado");
             Files.delete(Paths.get(URI.create("file:/E:/SyncData/file_2.xml/")));
