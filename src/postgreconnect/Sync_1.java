@@ -22,15 +22,26 @@ public class Sync_1 {
     DocumentBuilder dBuilder;
     File fXmlFile;
     ConnectDB connection;
-    String p1, p2, p3;
+    String p1, p2, p3, lp1;
     Connection con;
     JFrame decision;
 
     Sync_1(String xmlFile) {
         try {
-            fXmlFile = new File(xmlFile);
+            this.fXmlFile = new File(xmlFile);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            p1 = "jdbc:postgresql://localhost:5432/MyDB2";   //bd
+            System.out.println(xmlFile.charAt(xmlFile.length()-5));
+            if (xmlFile.charAt(xmlFile.length()-5)=='1'){
+                p1 = "jdbc:postgresql://localhost:5432/MyDB2";   //bd
+                lp1 = "jdbc:postgresql://localhost:5432/MyDB1"; 
+            }
+            else if(xmlFile.charAt(xmlFile.length()-5)=='2'){
+                p1 = "jdbc:postgresql://localhost:5432/MyDB1";   //bd
+                lp1 = "jdbc:postgresql://localhost:5432/MyDB2"; 
+            }
+            else{
+                System.exit(0);
+            }
             p2 = "postgres";                                //user
             p3 = "nuno";
             connection = new ConnectDB(p1, p2, p3);
@@ -173,6 +184,12 @@ public class Sync_1 {
                             + "Pretende substituir por " + value2[0], null, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         connection.executeSQLCommand(query);
                     }
+                    else{
+                        System.out.println(value1[0]);
+                        vtsVal--;
+                        query = value1[0]+ "SET ver='"+vtsVal+"' "+"WHERE " + value2[1];
+                        writeLocalBD(query);                 
+                    }
                 }
             }
         } catch (SQLException ex) {
@@ -183,7 +200,7 @@ public class Sync_1 {
     void alterVts(String table, String key, int vts) {
         int vt = 1;
         vt += vts;
-        ConnectDB localConnection = new ConnectDB("jdbc:postgresql://localhost:5432/MyDB1", p2, p3);
+        ConnectDB localConnection = new ConnectDB(lp1, p2, p3);
         String localSqlQuery = "SELECT * FROM " + table + " WHERE (" + localConnection.getTablePKeys(table) + " = '" + key + "')";
         ResultSet localRs = localConnection.executeSQLCommand(localSqlQuery);
         int rs = localConnection.getVts(localRs);
@@ -200,7 +217,7 @@ public class Sync_1 {
     }
     
     void writeLocalBD(String query){
-        ConnectDB localConnection = new ConnectDB("jdbc:postgresql://localhost:5432/MyDB1", p2, p3);
+        ConnectDB localConnection = new ConnectDB(lp1, p2, p3);
         ResultSet localRs = localConnection.executeSQLCommand(query);  
         localConnection.closeDB();
     }

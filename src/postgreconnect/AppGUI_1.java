@@ -23,25 +23,31 @@ public class AppGUI_1 extends javax.swing.JFrame {
     Statement stmt;
     ResultSet rs;
     int a;
-    String key, p1, p2, p3, sql;
+    String key, p1, p2, p3, title, file, sql;
     ConstructXML fileResult;
     ConnectDB connection;
     DatabaseMetaData dbmd;
     boolean isPeople;
 
-    public AppGUI_1() {
+    public AppGUI_1(String bd, String user, String pass, String file, String title) {
         initComponents();
-        p1 = "jdbc:postgresql://localhost:5432/MyDB1";  //bd
-        p2 = "postgres";                                //user
-        p3 = "nuno";                                    //pass
+//        p1 = "jdbc:postgresql://localhost:5432/MyDB1";  //bd
+//        p2 = "postgres";                                //user
+//        p3 = "nuno";                                    //pass
+        p1 = bd;                                  //bd
+        p2 = user;                                //user
+        p3 = pass; 
+        this.file = file;
         connection = new ConnectDB(p1, p2, p3);
         con = connection.getCon();
         dbmd = connection.getDbmd();
         stmt = connection.getStmt();
+        this.setTitle(title);
         ArrayList<String> keys = connection.getPKeys();
         System.out.println(keys.toString());
         try {
-            fileResult = new ConstructXML("E:/SyncData/file_1.xml");     
+            //fileResult = new ConstructXML("E:/SyncData/file_1.xml");  
+            fileResult = new ConstructXML(file); 
         } catch (TransformerException | SAXException | IOException ex) {
             Logger.getLogger(AppGUI_1.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -68,7 +74,7 @@ public class AppGUI_1 extends javax.swing.JFrame {
         moradaLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Tabela - Loc 1");
+        setTitle(getTitle());
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tablesJCombo.setMinimumSize(new java.awt.Dimension(28, 30));
@@ -165,13 +171,10 @@ public class AppGUI_1 extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(19, 19, 19)
-                                        .addComponent(PkLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(moradaLabel)
-                                            .addComponent(nomeLabel))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                        .addComponent(PkLabel))
+                                    .addComponent(moradaLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(nomeLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(campo2, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
@@ -341,11 +344,14 @@ public class AppGUI_1 extends javax.swing.JFrame {
     }//GEN-LAST:event_deletetBtActionPerformed
 
     private void syncBtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_syncBtActionPerformed
-        new Sync_1("E:/SyncData/file_1.xml");
+        //new Sync_1("E:/SyncData/file_1.xml");
+        new Sync_1(file);
         try {
             JOptionPane.showMessageDialog(null, "Finalizado");
-            Files.delete(Paths.get(URI.create("file:/E:/SyncData/file_1.xml/")));
-            fileResult = new ConstructXML("E:/SyncData/file_1.xml");           
+            //Files.delete(Paths.get(URI.create("file:/E:/SyncData/file_1.xml/")));
+            Files.delete(Paths.get(URI.create("file:/"+file)));
+            //fileResult = new ConstructXML("E:/SyncData/file_1.xml"); 
+            fileResult = new ConstructXML(file); 
         } catch (TransformerException | SAXException | IOException ex) {
             Logger.getLogger(AppGUI_1.class.getName()).log(Level.SEVERE, null, ex);
         }
