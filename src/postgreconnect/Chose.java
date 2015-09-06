@@ -7,7 +7,6 @@ public class Chose extends javax.swing.JFrame {
 
     boolean db1, db2;
     AppGUI_1 con1, con2;
-    //AppGUI_2 con2;
 
     public Chose() {
         initComponents();
@@ -65,7 +64,7 @@ public class Chose extends javax.swing.JFrame {
 
     private void bd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bd1ActionPerformed
         if (!db1) {
-            con1 = new AppGUI_1("jdbc:postgresql://localhost:5432/MyDB1","postgres","nuno","E:/SyncData/file_1.xml","Tabela - Loc 1");
+            con1 = new AppGUI_1("jdbc:postgresql://localhost:5432/MyDB1","postgres","nuno","/SyncData/file_1.xml","Tabela - Loc 1");
             bd1.setBackground(Color.green);
             con1.setVisible(rootPaneCheckingEnabled);
             db1 = true;
@@ -80,7 +79,7 @@ public class Chose extends javax.swing.JFrame {
     private void bd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bd2ActionPerformed
 
          if (!db2) {
-            con2 = new AppGUI_1("jdbc:postgresql://localhost:5432/MyDB2","postgres","nuno","E:/SyncData/file_2.xml","Tabela - Loc 2");
+            con2 = new AppGUI_1("jdbc:postgresql://localhost:5432/MyDB2","postgres","nuno","/SyncData/file_2.xml","Tabela - Loc 2");
             bd2.setBackground(Color.green);
             con2.setVisible(rootPaneCheckingEnabled);
             db2 = true;

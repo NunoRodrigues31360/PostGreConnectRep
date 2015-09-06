@@ -349,7 +349,7 @@ public class AppGUI_1 extends javax.swing.JFrame {
         try {
             JOptionPane.showMessageDialog(null, "Finalizado");
             //Files.delete(Paths.get(URI.create("file:/E:/SyncData/file_1.xml/")));
-            Files.delete(Paths.get(URI.create("file:/"+file)));
+            Files.delete(Paths.get(URI.create("file:"+file)));
             //fileResult = new ConstructXML("E:/SyncData/file_1.xml"); 
             fileResult = new ConstructXML(file); 
         } catch (TransformerException | SAXException | IOException ex) {

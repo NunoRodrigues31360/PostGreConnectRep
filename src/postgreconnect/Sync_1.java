@@ -171,6 +171,10 @@ public class Sync_1 {
                     System.out.println("MODIFY  " + modifiedQuery);
                     connection.executeSQLCommand(modifiedQuery); // nova instrução               
                 }
+                else{                                   // delete em localBD
+                    String[] value1 = sqlQuery.split("\\*");
+                    writeLocalBD("DELETE "+ value1[1]);
+                }
             } else {
                 int vtsVal = connection.getVts(rs);
                 if (Integer.parseInt(vts) > vtsVal) {
