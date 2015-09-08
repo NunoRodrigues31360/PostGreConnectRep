@@ -330,6 +330,9 @@ public class AppGUI_1 extends javax.swing.JFrame {
     }//GEN-LAST:event_updateBtActionPerformed
 
     private void deletetBtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletetBtActionPerformed
+        int order = Integer.parseInt(campo3.getText());
+        order++;
+        campo3.setText(Integer.toString(order));
         try {
             String sql = "DELETE FROM " + selectedTable + " WHERE("
                     + rs.getMetaData().getColumnName(1) + "='" + campo1.getText() + "')";
